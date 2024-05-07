@@ -17,7 +17,16 @@ let items = [
 
 // Get all Tasks
 router.get('/', (req, res) => {
-    res.status(200).json(items);
+    const sql = 'SELECT * FROM Tasks';
+
+    db.all(sql, [], (err, rows) => {
+        if (err) {
+            console.error(err.message);
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.status(200).json(rows);
+    });
 });
 
 // Create an Task
