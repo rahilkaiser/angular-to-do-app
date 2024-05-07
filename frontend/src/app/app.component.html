@@ -1,0 +1,33 @@
+<div class="flex-column m-4 ">
+  <div class=" h-[100px] bg-blue-700 flex justify-content-center items-center rounded-2xl">
+    <h1 class="text-3xl font-bold text-cyan-50 ">
+      Angular TODO APP
+    </h1>
+  </div>
+
+  <form>
+    <div class="form-group">
+      <label for="TaskNAme">Task Name</label>
+      <input class="form-control" id="TaskName">
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea class="form-control" id="description" rows="3"></textarea>
+    </div>
+
+    <div class="col-2">
+      <div class="input-group">
+        <input
+          class="form-control"
+          placeholder="yyyy-mm-dd"
+          name="dp"
+          ngbDatepicker
+          #d="ngbDatepicker"
+        />
+        <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
