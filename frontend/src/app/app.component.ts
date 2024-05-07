@@ -21,7 +21,7 @@ export class AppComponent {
   taskForm = new FormGroup({
     taskName: new FormControl(''),
     description: new FormControl(''),
-    dueDate: new FormControl(''),
+    dueDateObj: new FormControl(''),
   });
 
 

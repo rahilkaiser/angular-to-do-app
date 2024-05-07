@@ -32,7 +32,19 @@ router.get('/', (req, res) => {
 // Create an Task
 router.post('/', (req, res) => {
     // Extract data from the request body
-    const { taskName, description, dueDate} = req.body;
+    const { taskName, description, dueDateObj} = req.body;
+
+    if (dueDateObj) {
+        var { year, month, day } = dueDateObj;
+        var dueDate = new Date(year, month - 1, day);
+
+        // Check if the date conversion was successful
+        if (isNaN(dueDate.getTime())) {
+            return res.status(400).json({ error: 'Invalid due date format' });
+        }
+    }
+    console.log(dueDateObj)
+    console.log(dueDate)
 
     // Define default values for isComplete and createdOn
     const isComplete = false; // Default value for isComplete
@@ -45,8 +57,9 @@ router.post('/', (req, res) => {
     VALUES (?, ?, ?, ?, ?, ?);
     `;
 
+    const dueDateISO = dueDate ? dueDate.toISOString() : null;
     // Parameters to pass into the SQL query
-    const params = [taskName, description, dueDate, createdOn, isComplete, completedOn];
+    const params = [taskName, description, dueDateISO, createdOn, isComplete, completedOn];
 
     // Execute the SQL query to insert the new task
     db.run(sql, params, function(err) {
@@ -61,7 +74,7 @@ router.post('/', (req, res) => {
             id: this.lastID,
             taskName: taskName,
             description: description,
-            dueDate: dueDate,
+            dueDate: dueDateISO,
             createdOn: createdOn,
             isComplete: isComplete,
             completedOn: completedOn
