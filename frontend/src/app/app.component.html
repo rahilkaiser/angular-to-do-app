@@ -5,29 +5,55 @@
     </h1>
   </div>
 
-  <form>
-    <div class="form-group">
+  <form [formGroup]="taskForm" (ngSubmit)="submitTask()">
+    <div class="form-group my-2">
       <label for="TaskNAme">Task Name</label>
-      <input class="form-control" id="TaskName">
+      <input formControlName="taskName"
+             class="form-control"
+             id="TaskName">
     </div>
-    <div class="form-group">
+    <div class="form-group my-2">
       <label for="description">Description</label>
-      <textarea class="form-control" id="description" rows="3"></textarea>
+      <textarea
+        formControlName="description"
+        class="form-control"
+        id="description"
+        rows="3"></textarea>
     </div>
 
-    <div class="col-2">
-      <div class="input-group">
-        <input
-          class="form-control"
-          placeholder="yyyy-mm-dd"
-          name="dp"
-          ngbDatepicker
-          #d="ngbDatepicker"
-        />
-        <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
+    <div class="flex my-4">
+      <div class="col-2 mr-4">
+        <div class="input-group">
+          <input
+            formControlName="dueDate"
+            class="form-control"
+            placeholder="yyyy-mm-dd"
+            name="dp"
+            ngbDatepicker
+            #d="ngbDatepicker"
+          />
+          <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+            <i class="fa fa-calendar" aria-hidden="true"></i></button>
+        </div>
       </div>
+      <button type="submit"
+              class="btn btn-primary">Add Task
+      </button>
     </div>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <div class="btn-group" role="group" aria-label="Badge buttons">
+      <button type="button"
+              class="btn"
+              [class.btn-outline-primary]="status"
+              [class.btn-primary]="!status"
+              (click)="setStatus(false)">Show All
+      </button>
+      <button type="button"
+              class="btn"
+              [class.btn-outline-success]="!status"
+              [class.btn-success]="status"
+              (click)="setStatus(true)">Is Completed
+      </button>
+    </div>
   </form>
 </div>
