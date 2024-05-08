@@ -57,3 +57,28 @@
     </div>
   </form>
 </div>
+<div class="m-4">
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">Index</th>
+      <th scope="col">TaskName</th>
+      <th scope="col">DueDate</th>
+      <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of tasks">
+      <td>{{ item.id }}</td>
+      <td>{{ item.taskName }}</td>
+      <td>{{ item.dueDate|date }}</td>
+      <td>
+        <div class="flex justify-evenly">
+          <button class="btn btn-warning">Edit</button>
+          <button class="btn btn-danger">Delete</button>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
