@@ -37,4 +37,9 @@ export class TaskService {
     // params.append('dueDate', taskData.dueDate);
     return this.http.post(this.apiUrl, taskData);
   }
+
+  deleteTask(id: number): Observable<any> {
+    const url = `${this.apiUrl}/${id}`;
+    return this.http.delete(url);
+  }
 }

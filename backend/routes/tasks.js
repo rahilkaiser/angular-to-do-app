@@ -92,11 +92,24 @@ router.put('/:id', (req, res) => {
     res.status(200).send(items.find(item => item.id === parseInt(id)));
 });
 
-// Delete an Task
+// Delete a task by ID
 router.delete('/:id', (req, res) => {
     const { id } = req.params;
-    items = items.filter(item => item.id !== parseInt(id));
-    res.status(204).send();
+
+    const sql = 'DELETE FROM Tasks WHERE id = ?';
+    db.run(sql, id, function(err) {
+        if (err) {
+            console.error(err.message);
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        // Check if any row was deleted
+        if (this.changes > 0) {
+            res.status(204).send();
+        } else {
+            res.status(404).json({ error: 'No task found with the given ID' });
+        }
+    });
 });
 
 module.exports = router;

@@ -75,7 +75,7 @@
       <td>
         <div class="flex justify-evenly">
           <button class="btn btn-warning">Edit</button>
-          <button class="btn btn-danger">Delete</button>
+          <button class="btn btn-danger" (click)="this.deleteTask(item.id)">Delete</button>
         </div>
       </td>
     </tr>

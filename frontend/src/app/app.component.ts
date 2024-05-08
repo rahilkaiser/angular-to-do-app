@@ -60,4 +60,14 @@ export class AppComponent implements OnInit {
       error: (error) => console.error('Error fetching tasks', error)
     })
   }
+
+  deleteTask(id:number) {
+    this.taskService.deleteTask(id).subscribe({
+      next: () => {
+        console.log('Task deleted successfully');
+        this.getAllTasks();
+      },
+      error: (err) => console.error('Error deleting task:', err)
+    });
+  }
 }
