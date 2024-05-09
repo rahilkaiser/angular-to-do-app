@@ -32,14 +32,18 @@ export class TaskService {
   }
 
   createTask(taskData: any): Observable<any> {
-    // let params = new HttpParams().set('taskName', taskData.taskName);
-    // params.append('description', taskData.description);
-    // params.append('dueDate', taskData.dueDate);
+    console.log("kfldslfnlk",taskData);
     return this.http.post(this.apiUrl, taskData);
   }
 
   deleteTask(id: number): Observable<any> {
     const url = `${this.apiUrl}/${id}`;
     return this.http.delete(url);
+  }
+
+  updateTask(task: TaskModel): Observable<any> {
+    const url = `${this.apiUrl}/${task.id}`;
+    console.log("LKMLKLLM",task);
+    return this.http.put<TaskModel>(url, task);
   }
 }

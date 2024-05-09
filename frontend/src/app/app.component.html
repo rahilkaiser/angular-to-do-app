@@ -5,7 +5,7 @@
     </h1>
   </div>
 
-  <form [formGroup]="taskForm" (ngSubmit)="submitTask()">
+  <form [formGroup]="taskForm">
     <div class="form-group my-2">
       <label for="TaskNAme">Task Name</label>
       <input formControlName="taskName"
@@ -25,6 +25,7 @@
       <div class="col-2 mr-4">
         <div class="input-group">
           <input
+            id="textDate"
             formControlName="dueDateObj"
             class="form-control"
             placeholder="yyyy-mm-dd"
@@ -36,8 +37,15 @@
             <i class="fa fa-calendar" aria-hidden="true"></i></button>
         </div>
       </div>
-      <button type="submit"
-              class="btn btn-primary">Add Task
+
+      <button *ngIf="!this.isEditMode" type="submit"
+              class="btn btn-primary"
+              (click)="submitTask()">Add Task
+      </button>
+
+      <button *ngIf="this.isEditMode" type="submit"
+              class="btn btn-warning"
+      (click)="submitEditTask()">Update Task
       </button>
     </div>
 
@@ -71,10 +79,10 @@
     <tr *ngFor="let item of tasks">
       <td>{{ item.id }}</td>
       <td>{{ item.taskName }}</td>
-      <td>{{ item.dueDate|date }}</td>
+      <td>{{ item.dueDateObj|date }}</td>
       <td>
         <div class="flex justify-evenly">
-          <button class="btn btn-warning">Edit</button>
+          <button class="btn btn-warning" (click)="this.editTaskMode(item.id)">Edit</button>
           <button class="btn btn-danger" (click)="this.deleteTask(item.id)">Delete</button>
         </div>
       </td>

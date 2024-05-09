@@ -20,7 +20,7 @@ const db = new sqlite3.Database('./mydb.db', (err) => {
             'id INTEGER PRIMARY KEY, ' +
             'taskName TEXT NOT NULL, ' +
             'description TEXT, ' +
-            'dueDate DATETIME, ' +
+            'dueDateObj DATETIME, ' +
             'createdOn DATETIME, ' +
             'isComplete BOOLEAN, ' +
             'completedOn DATETIME' +

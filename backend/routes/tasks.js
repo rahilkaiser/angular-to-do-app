@@ -43,8 +43,6 @@ router.post('/', (req, res) => {
             return res.status(400).json({ error: 'Invalid due date format' });
         }
     }
-    console.log(dueDateObj)
-    console.log(dueDate)
 
     // Define default values for isComplete and createdOn
     const isComplete = false; // Default value for isComplete
@@ -87,9 +85,29 @@ router.post('/', (req, res) => {
 // Update an Task
 router.put('/:id', (req, res) => {
     const { id } = req.params;
-    const { name } = req.body;
-    items = items.map(item => item.id === parseInt(id) ? { ...item, name: name } : item);
-    res.status(200).send(items.find(item => item.id === parseInt(id)));
+    const { taskName, description, dueDateObj, isComplete } = req.body;
+
+    if (dueDateObj) {
+        var { year, month, day } = dueDateObj;
+        var dueDate = new Date(year, month - 1, day);
+
+        // Check if the date conversion was successful
+        if (isNaN(dueDate.getTime())) {
+            return res.status(400).json({ error: 'Invalid due date format' });
+        }
+    }
+
+    const sql = `UPDATE Tasks SET taskName = ?, description = ?, dueDate = ?, isComplete = ? WHERE id = ?`;
+
+    const dueDateISO = dueDate ? dueDate.toISOString() : null;
+
+    db.run(sql, [taskName, description, dueDateISO, isComplete, id], function(err) {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.json({ message: 'Task updated', id: this.lastID });
+    });
 });
 
 // Delete a task by ID
