@@ -6,6 +6,7 @@ import {TaskService} from "./task.service";
 import {HttpClientModule} from "@angular/common/http";
 import {CommonModule, formatDate} from "@angular/common";
 import {TaskModel} from "../models/task.model";
+import {timeout} from "rxjs";
 
 
 @Component({
@@ -36,6 +37,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.getAllTasks();
+
   }
 
 
@@ -62,6 +64,7 @@ export class AppComponent implements OnInit {
       next: (tasks) => this.tasks = tasks,
       error: (error) => console.error('Error fetching tasks', error)
     })
+
   }
 
   deleteTask(id: number) {
@@ -124,4 +127,18 @@ export class AppComponent implements OnInit {
   }
 
   protected readonly Date = Date;
+
+  toggleCompletion(task: any) {
+    task.isComplete = !task.isComplete; // Toggle the completion status
+    this.taskService.updateTaskCompletion(task.id, task.isComplete).subscribe({
+      next: (response) => {
+        console.log('Task completion status updated:', response);
+      },
+      error: (err) => {
+        console.error('Failed to update task', err);
+        // Optionally revert the toggle on error
+        task.isComplete = !task.isComplete;
+      }
+    });
+  }
 }

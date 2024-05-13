@@ -29,7 +29,7 @@ router.get('/', (req, res) => {
     });
 });
 
-// Create an Task
+// Create a Task
 router.post('/', (req, res) => {
     // Extract data from the request body
     const { taskName, description, dueDateObj} = req.body;
@@ -127,6 +127,22 @@ router.delete('/:id', (req, res) => {
         } else {
             res.status(404).json({ error: 'No task found with the given ID' });
         }
+    });
+});
+
+// Toggle task completion status
+router.put('/:id/toggle-complete', (req, res) => {
+    const { id } = req.params;
+    const { isComplete } = req.body;
+
+    const sql = `UPDATE Tasks SET isComplete = ? WHERE id = ?`;
+
+    db.run(sql, [isComplete, id], function(err) {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.json({ message: 'Task completion status updated', id: id, isComplete: isComplete });
     });
 });
 

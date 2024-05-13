@@ -45,7 +45,7 @@
 
       <button *ngIf="this.isEditMode" type="submit"
               class="btn btn-warning"
-      (click)="submitEditTask()">Update Task
+              (click)="submitEditTask()">Update Task
       </button>
     </div>
 
@@ -78,7 +78,16 @@
     <tbody>
     <tr *ngFor="let item of tasks">
       <td>{{ item.id }}</td>
-      <td>{{ item.taskName }}</td>
+      <td>
+        <input *ngIf="item.isComplete" class="form-check-input" type="checkbox" value="complete" id="flexCheckChecked1"
+               (change)="toggleCompletion(item)"
+                 checked>
+
+        <input *ngIf="!item.isComplete" class="form-check-input" type="checkbox" value="complete" id="flexCheckChecked2"
+               (change)="toggleCompletion(item)"
+        >
+        {{ item.taskName }}
+      </td>
       <td>{{ item.dueDateObj|date }}</td>
       <td>
         <div class="flex justify-evenly">
