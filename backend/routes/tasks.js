@@ -19,19 +19,29 @@ let items = [
 router.get('/', (req, res) => {
     const isComplete = req.query.isComplete; // Get the query parameter
 
-    let sql = 'SELECT * FROM Tasks';
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 10;
+    const offset = (page - 1) * pageSize;
 
-    if (isComplete) {
+    let sql = `SELECT * FROM Tasks LIMIT ? OFFSET ?`;
+
+    if (isComplete === "true" ) {
         sql += ' WHERE isComplete = 1';
     }
 
-    db.all(sql, [], (err, rows) => {
+    db.all(sql, [pageSize, offset], (err, rows) => {
         if (err) {
             console.error(err.message);
             res.status(500).json({ error: err.message });
             return;
         }
-        res.status(200).json(rows);
+        db.get("SELECT COUNT(id) AS count FROM Tasks", [], (err, countResult) => {
+            if (err) {
+                res.status(500).json({ error: err.message });
+                return;
+            }
+            res.json({ data: rows, total: countResult.count });
+        });
     });
 });
 

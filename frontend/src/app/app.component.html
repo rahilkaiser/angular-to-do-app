@@ -98,4 +98,10 @@
     </tr>
     </tbody>
   </table>
+  <ngb-pagination
+    [collectionSize]=total
+    [(page)]="currentPage"
+    [pageSize]="pageSize"
+    [directionLinks]="false"
+    (pageChange)="loadTasks()"></ngb-pagination>
 </div>

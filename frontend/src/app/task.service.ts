@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {TaskModel} from "../models/task.model";
+import {TaskModel, TaskResponse } from "../models/task.model";
 import {map} from 'rxjs/operators';
 
 
@@ -15,15 +15,18 @@ export class TaskService {
   constructor(private http: HttpClient) {
   }
 
-  getTasks(isComplete?: boolean): Observable<TaskModel[]> {
+  getTasks(isComplete?: boolean, page?: number, pageSize?: number): Observable<{data: TaskModel[], total: number}> {
     let params = new HttpParams();
     if (isComplete !== undefined) {
       params = params.set('isComplete', String(isComplete));
     }
+    if (page !== undefined) params = params.append('page', String(page));
+    if (pageSize !== undefined) params = params.append('pageSize', String(pageSize));
 
-    return this.http.get<any[]>(this.apiUrl,{ params }).pipe(
-      map(tasks => tasks.map((task) =>
-        new TaskModel(
+
+    return this.http.get<TaskResponse>(this.apiUrl, { params }).pipe(
+      map(response => ({
+        data: response.data.map(task => new TaskModel(
           task.id,
           task.taskName,
           task.description,
@@ -31,8 +34,9 @@ export class TaskService {
           new Date(task.createdOn),
           task.isComplete,
           task.completedOn ? new Date(task.completedOn) : undefined
-        )
-      )),
+        )),
+        total: response.total
+      }))
     );
 
   }

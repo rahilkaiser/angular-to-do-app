@@ -1,3 +1,8 @@
+export interface TaskResponse {
+  data: any[];
+  total: number;
+}
+
 export class TaskModel {
   constructor(
     public id: number,
