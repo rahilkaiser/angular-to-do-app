@@ -37,12 +37,16 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.getAllTasks();
-
   }
 
 
   setStatus(isCompleted: boolean) {
     this.status = isCompleted;
+    if (this.status) {
+      this.getCompletedTasks();
+    } else {
+      this.getAllTasks();
+    }
     console.log('Status:', this.status);
   }
 
@@ -64,7 +68,13 @@ export class AppComponent implements OnInit {
       next: (tasks) => this.tasks = tasks,
       error: (error) => console.error('Error fetching tasks', error)
     })
+  }
 
+  getCompletedTasks() {
+    this.taskService.getTasks(true).subscribe({
+      next: (tasks) => this.tasks = tasks,
+      error: (error) => console.error('Error fetching completed tasks', error)
+    });
   }
 
   deleteTask(id: number) {

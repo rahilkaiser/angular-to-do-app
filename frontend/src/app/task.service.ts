@@ -15,8 +15,13 @@ export class TaskService {
   constructor(private http: HttpClient) {
   }
 
-  getTasks(): Observable<TaskModel[]> {
-    return this.http.get<any[]>(this.apiUrl).pipe(
+  getTasks(isComplete?: boolean): Observable<TaskModel[]> {
+    let params = new HttpParams();
+    if (isComplete !== undefined) {
+      params = params.set('isComplete', String(isComplete));
+    }
+
+    return this.http.get<any[]>(this.apiUrl,{ params }).pipe(
       map(tasks => tasks.map((task) =>
         new TaskModel(
           task.id,

@@ -17,7 +17,13 @@ let items = [
 
 // Get all Tasks
 router.get('/', (req, res) => {
-    const sql = 'SELECT * FROM Tasks';
+    const isComplete = req.query.isComplete; // Get the query parameter
+
+    let sql = 'SELECT * FROM Tasks';
+
+    if (isComplete) {
+        sql += ' WHERE isComplete = 1';
+    }
 
     db.all(sql, [], (err, rows) => {
         if (err) {
