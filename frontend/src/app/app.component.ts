@@ -151,7 +151,6 @@ export class AppComponent implements OnInit {
       },
       error: (err) => {
         console.error('Failed to update task', err);
-        // Optionally revert the toggle on error
         task.isComplete = !task.isComplete;
       }
     });

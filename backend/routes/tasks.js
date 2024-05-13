@@ -10,11 +10,15 @@ router.get('/', (req, res) => {
     const pageSize = parseInt(req.query.pageSize) || 10;
     const offset = (page - 1) * pageSize;
 
-    let sql = `SELECT * FROM Tasks LIMIT ? OFFSET ?`;
+    let sql = 'SELECT * FROM Tasks';
 
     if (isComplete === "true" ) {
         sql += ' WHERE isComplete = 1';
     }
+    
+     sql += ' LIMIT ? OFFSET ?';
+
+
 
     db.all(sql, [pageSize, offset], (err, rows) => {
         if (err) {
