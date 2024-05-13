@@ -1,12 +1,11 @@
-import {Component, model, OnChanges, OnInit} from '@angular/core';
+import {Component, model, OnInit} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 import {NgbInputDatepicker, NgbPagination} from "@ng-bootstrap/ng-bootstrap";
-import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TaskService} from "./task.service";
 import {HttpClientModule} from "@angular/common/http";
-import {CommonModule, formatDate} from "@angular/common";
+import {CommonModule} from "@angular/common";
 import {TaskModel} from "../models/task.model";
-import {timeout} from "rxjs";
 
 
 @Component({
@@ -43,16 +42,19 @@ export class AppComponent implements OnInit {
     this.loadTasks();
   }
 
-
+  /** Sets the Status of a Task to Completed or Uncompleted
+   *
+   * @param isCompleted
+   */
   setStatus(isCompleted: boolean) {
     this.status = isCompleted;
     this.loadTasks();
-    console.log('Status:', this.status);
   }
 
+  /** Submits the Form and Creates a new Task
+   *
+   */
   submitTask() {
-    console.log(this.taskForm.value);
-
     this.taskService.createTask(this.taskForm.value).subscribe(
       response => {
         console.log("Task has been added", response);
@@ -63,20 +65,10 @@ export class AppComponent implements OnInit {
     )
   }
 
-  // getAllTasks() {
-  //   this.taskService.getTasks().subscribe({
-  //     next: (tasks) => this.tasks = tasks,
-  //     error: (error) => console.error('Error fetching tasks', error)
-  //   })
-  // }
-  //
-  // getCompletedTasks() {
-  //   this.taskService.getTasks(true).subscribe({
-  //     next: (tasks) => this.tasks = tasks,
-  //     error: (error) => console.error('Error fetching completed tasks', error)
-  //   });
-  // }
-
+  /** Deletes A Task
+   *
+   * @param id
+   */
   deleteTask(id: number) {
     this.taskService.deleteTask(id).subscribe({
       next: () => {
@@ -89,6 +81,10 @@ export class AppComponent implements OnInit {
   }
 
 
+  /** Fills the Form with the Info of the Task to be edited
+   *
+   * @param id
+   */
   editTaskMode(id: number) {
     this.isEditMode = true;
     this.editTask = this.tasks.find((task) => task.id === id);
@@ -97,24 +93,29 @@ export class AppComponent implements OnInit {
       this.taskForm.controls.taskName.setValue(this.editTask.taskName);
       this.taskForm.controls.description.setValue(this.editTask.description);
 
-      console.log(this.editTask)
       if (this.editTask.dueDateObj) {
         this.taskForm.controls['dueDateObj'].setValue(this.toDateObject(new Date(this.editTask.dueDateObj)));
       }
     }
   }
 
+  /** Formats the Date such that its readable for the Datepicker
+   *
+   * @param date
+   * @private
+   */
   private toDateObject(date: Date): any {
     return {
       year: date.getFullYear(),
-      month: date.getMonth() + 1,  // Convert 0-indexed month to 1-indexed
+      month: date.getMonth() + 1,
       day: date.getDate()
     };
   }
 
+  /** Submits the Form for the edited Task
+   *
+   */
   submitEditTask() {
-    console.log(this.taskForm.value);
-
     if (this.editTask) {
       this.editTask.taskName = this.taskForm.value.taskName as string;
       this.editTask.description = this.taskForm.value.description as string;
@@ -138,8 +139,12 @@ export class AppComponent implements OnInit {
 
   protected readonly Date = Date;
 
+  /** toggle the Completion Status of a task
+   *
+   * @param task
+   */
   toggleCompletion(task: any) {
-    task.isComplete = !task.isComplete; // Toggle the completion status
+    task.isComplete = !task.isComplete;
     this.taskService.updateTaskCompletion(task.id, task.isComplete).subscribe({
       next: (response) => {
         console.log('Task completion status updated:', response);
@@ -152,6 +157,9 @@ export class AppComponent implements OnInit {
     });
   }
 
+  /** Loads all Tasks
+   *
+   */
   loadTasks() {
     this.taskService.getTasks(this.status, this.currentPage, this.pageSize).subscribe({
       next: (result) => {

@@ -15,6 +15,12 @@ export class TaskService {
   constructor(private http: HttpClient) {
   }
 
+  /** Loads All Tasks
+   *
+   * @param isComplete
+   * @param page
+   * @param pageSize
+   */
   getTasks(isComplete?: boolean, page?: number, pageSize?: number): Observable<{data: TaskModel[], total: number}> {
     let params = new HttpParams();
     if (isComplete !== undefined) {
@@ -41,23 +47,38 @@ export class TaskService {
 
   }
 
+  /** Creates a Task
+   *
+   * @param taskData
+   */
   createTask(taskData: any): Observable<any> {
-    console.log("kfldslfnlk", taskData);
     return this.http.post(this.apiUrl, taskData);
   }
 
+  /** Deletes A Task
+   *
+   * @param id
+   */
   deleteTask(id: number): Observable<any> {
     const url = `${this.apiUrl}/${id}`;
     return this.http.delete(url);
   }
 
+  /** Updates A Task
+   *
+   * @param task
+   */
   updateTask(task: TaskModel): Observable<any> {
     const url = `${this.apiUrl}/${task.id}`;
-    console.log("LKMLKLLM", task);
     return this.http.put<TaskModel>(url, task);
   }
 
 
+  /** toggle the Completion Status of a task
+   *
+   * @param taskId
+   * @param isComplete
+   */
   updateTaskCompletion(taskId: number, isComplete: boolean): Observable<any> {
     const url = `${this.apiUrl}/${taskId}/toggle-complete`;
     return this.http.put(url, {isComplete});
