@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json()); // Middleware to parse JSON bodies
 
 app.use(cors({
-    origin: 'http://localhost:4200',
+    origin: '*',
     methods: 'GET,POST,PUT,DELETE',
     credentials: true
 }));
@@ -20,7 +20,7 @@ const db = new sqlite3.Database('./mydb.db', (err) => {
             'id INTEGER PRIMARY KEY, ' +
             'taskName TEXT NOT NULL, ' +
             'description TEXT, ' +
-            'dueDateObj DATETIME, ' +
+            'dueDate DATETIME, ' +
             'createdOn DATETIME, ' +
             'isComplete BOOLEAN, ' +
             'completedOn DATETIME' +
