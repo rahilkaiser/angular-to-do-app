@@ -12,7 +12,7 @@
 
 Welcome to the Angular To-Do App project! This application serves as a simple and effective to-do list manager, built to enhance and showcase Angular and Node.js skills. The project uses Angular for the frontend and a Node.js server for the backend. The backend provides an API with CREATE, READ, UPDATE, and DELETE (CRUD) operations, and the frontend allows for task management, filtering, and pagination.
 
-![App Screenshot](https://your-image-url-here)
+![AngularToDo](https://github.com/rahilkaiser/angular-to-do-app/assets/95457266/4e9a7c2b-fd0e-4d85-a228-9f22a299df37)
 
 ## Tech Stack
 
